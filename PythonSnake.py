@@ -99,7 +99,6 @@ class InsertionSort:
                 array[j+1] = array[j]
                 j -= 1
                 count += 1
-                #print(j,array)
             array[j+1] = current
 
 class GamePage:
@@ -153,13 +152,13 @@ screen_width = int(setting["width"])
 screen_height = int(setting["height"])
 gameWindow = pygame.display.set_mode((screen_width, screen_height))
 
+#--------Loading Resource-----------------
+
 bg_url = resource_path('resource/bg.png')
 main_url = resource_path('resource/Main.png')
 ranking_url = resource_path('resource/ranking.png')
 gameOver_url = resource_path('resource/gameover.png')
 icon_url = resource_path('resource/icon.png')
-
-
 
 bg_game = pygame.image.load(bg_url)
 Main_Bg = pygame.image.load(main_url)
@@ -310,7 +309,7 @@ def gameloop():
 
         #---------------GAME START----------------------
         elif gp.getGameStart(): 
-            
+            #------------Control---------------------
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit_game = True
@@ -335,7 +334,7 @@ def gameloop():
                         gp.setGameStart(False)
                         gp.setGameOver(False)
                         gp.setRanking(False)
-
+            #--------Moving Snake-----------------
             snake_x = snake_x + velocity_x
             snake_y = snake_y + velocity_y
 
@@ -351,7 +350,7 @@ def gameloop():
 
                 food_x = random.randint(20, screen_width - 30)  # Random ตำแหน่งอาหารใหม่ เมื่ออาหารถูกกิน
                 food_y = random.randint(60, screen_height - 30)
-                snake_length +=5      #เพิ่มความยาวของงูเมื่อกินอาหารได้  <<-- BigO = 5(n)+2(หัวและหาง ตอนเริ่ม)
+                snake_length +=5      #เพิ่มความยาวของงูเมื่อกินอาหารได้  <<-- BigO = 5(n)+1(หัวตอนเริ่ม) / ต่อเฟรมเวลา Render ตัวงู
 
             gameWindow.blit(bg_game,[0,0])
             text_screen("Score: " + str(score * 10), red, 650, 5)  # Update คะแนนเมื่อกิน
@@ -366,7 +365,7 @@ def gameloop():
             snake_body.append(Create_Body) # นำที่สร้างใส่ร่างงูที่สร้างเพิ่ม ใส่ Linked List
             
 
-            #print(snake_body)
+            
             if snake_body.FindLenght()>snake_length:  #เงื่อนไขเช็คกันการสร้างงูยาวเกินขนาดปัจจุบัน 
                 snake_body.DeleteFirstNode()
 
@@ -381,7 +380,9 @@ def gameloop():
                 gp.setGameStart(False) 
                 #game_over = True
                 #game_start = False
+            #print(snake_body)
             draw_sneak(gameWindow, bGreen, snake_body, snake_size) #Drawing Snake body
+            
        
        #---------------Ranking---------------------------
         elif gp.getRanking():
